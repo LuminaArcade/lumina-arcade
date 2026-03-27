@@ -1,23 +1,35 @@
-import { PinataSDK } from 'pinata';
-
-const pinata = new PinataSDK({
-  pinataJwt:     process.env.PINATA_JWT!,
-  pinataGateway: process.env.NEXT_PUBLIC_PINATA_GATEWAY!,
-});
-
 const GATEWAY = process.env.NEXT_PUBLIC_PINATA_GATEWAY;
+
+async function getPinataHeaders() {
+  return {
+    'Authorization': `Bearer ${process.env.PINATA_JWT}`,
+    'Content-Type': 'application/json',
+  };
+}
 
 export async function uploadMetadata(
   metadata: Record<string, unknown>,
   name: string
 ): Promise<{ cid: string; uri: string }> {
-  const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
-  const file = new File([blob], `${name}.json`, { type: 'application/json' });
+  const headers = await getPinataHeaders();
 
-  const result = await pinata.upload.public.file(file);
+  const response = await fetch('https://api.pinata.cloud/pinning/pinJSONToIPFS', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      pinataContent: metadata,
+      pinataMetadata: { name: `${name}.json` },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Pinata upload failed: ${response.statusText}`);
+  }
+
+  const result = await response.json();
   return {
-    cid: result.cid,
-    uri: `${GATEWAY}/ipfs/${result.cid}`,
+    cid: result.IpfsHash,
+    uri: `${GATEWAY}/ipfs/${result.IpfsHash}`,
   };
 }
 
@@ -25,14 +37,29 @@ export async function uploadImageFromUrl(
   imageUrl: string,
   filename: string
 ): Promise<{ cid: string; url: string }> {
-  const response = await fetch(imageUrl);
-  const blob     = await response.blob();
-  const file     = new File([blob], filename, { type: blob.type });
+  const imageResponse = await fetch(imageUrl);
+  const blob = await imageResponse.blob();
 
-  const result = await pinata.upload.public.file(file);
+  const formData = new FormData();
+  formData.append('file', blob, filename);
+  formData.append('pinataMetadata', JSON.stringify({ name: filename }));
+
+  const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.PINATA_JWT}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Pinata upload failed: ${response.statusText}`);
+  }
+
+  const result = await response.json();
   return {
-    cid: result.cid,
-    url: `${GATEWAY}/ipfs/${result.cid}`,
+    cid: result.IpfsHash,
+    url: `${GATEWAY}/ipfs/${result.IpfsHash}`,
   };
 }
 
@@ -48,9 +75,9 @@ export function buildCharacterMetadata(
   ownerWallet: string
 ): Record<string, unknown> {
   return {
-    name:        character.name,
+    name: character.name,
     description: `${character.description}\n\n${character.backstory}`,
-    image:       character.imageUrl,
+    image: character.imageUrl,
     external_url: `${process.env.NEXT_PUBLIC_APP_URL}/character/${ownerWallet}`,
     attributes: [
       { trait_type: 'Rarity',   value: character.rarity },
@@ -64,8 +91,8 @@ export function buildCharacterMetadata(
     ],
     properties: {
       platform: 'Lumina Arcade',
-      owner:    ownerWallet,
-      version:  '1.0',
+      owner: ownerWallet,
+      version: '1.0',
     },
   };
 }
