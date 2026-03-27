@@ -22,9 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           },
           loginMethods: ['wallet', 'twitter'],
           embeddedWallets: {
-            solana: {
-              createOnLogin: 'users-without-wallets',
-            },
+            createOnLogin: 'users-without-wallets',
           },
         }}
       >
