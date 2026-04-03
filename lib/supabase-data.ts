@@ -1,10 +1,11 @@
-import { supabase, isSupabaseConfigured } from "./supabase";
+import { getSupabase, isSupabaseConfigured } from "./supabase";
 import type { Pool, UserProfile, Pledge, AiCharacter } from "./types";
 
 // ─── Pools ───────────────────────────────────────────
 
 export async function fetchPools(): Promise<Pool[] | null> {
-  if (!isSupabaseConfigured || !supabase) return null;
+  const supabase = getSupabase();
+  if (!supabase) return null;
   const { data: pools, error } = await supabase
     .from("pools")
     .select("*, pledges(*)")
@@ -16,7 +17,8 @@ export async function fetchPools(): Promise<Pool[] | null> {
 }
 
 export async function fetchPool(id: string): Promise<Pool | null> {
-  if (!isSupabaseConfigured || !supabase) return null;
+  const supabase = getSupabase();
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from("pools")
     .select("*, pledges(*)")
@@ -28,7 +30,8 @@ export async function fetchPool(id: string): Promise<Pool | null> {
 }
 
 export async function insertPool(pool: Pool): Promise<boolean> {
-  if (!isSupabaseConfigured || !supabase) return false;
+  const supabase = getSupabase();
+  if (!supabase) return false;
   const { error } = await supabase.from("pools").insert({
     id: pool.id,
     name: pool.name,
@@ -53,7 +56,8 @@ export async function insertPledge(
   wallet: string,
   amount: number
 ): Promise<boolean> {
-  if (!isSupabaseConfigured || !supabase) return false;
+  const supabase = getSupabase();
+  if (!supabase) return false;
 
   const { error: pledgeError } = await supabase.from("pledges").insert({
     pool_id: poolId,
@@ -94,7 +98,8 @@ export async function insertPledge(
 // ─── Users ───────────────────────────────────────────
 
 export async function fetchUsers(): Promise<Record<string, UserProfile> | null> {
-  if (!isSupabaseConfigured || !supabase) return null;
+  const supabase = getSupabase();
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
@@ -110,7 +115,8 @@ export async function fetchUsers(): Promise<Record<string, UserProfile> | null> 
 }
 
 export async function upsertUser(user: UserProfile): Promise<boolean> {
-  if (!isSupabaseConfigured || !supabase) return false;
+  const supabase = getSupabase();
+  if (!supabase) return false;
   const { error } = await supabase.from("profiles").upsert({
     wallet: user.wallet,
     display_name: user.displayName,
@@ -125,7 +131,8 @@ export async function upsertUser(user: UserProfile): Promise<boolean> {
 }
 
 export async function addXpToUser(wallet: string, amount: number): Promise<boolean> {
-  if (!isSupabaseConfigured || !supabase) return false;
+  const supabase = getSupabase();
+  if (!supabase) return false;
 
   const { data } = await supabase
     .from("profiles")
@@ -146,7 +153,8 @@ export async function addXpToUser(wallet: string, amount: number): Promise<boole
 // ─── AI Characters ───────────────────────────────────
 
 export async function fetchAiCharacters(wallet?: string): Promise<AiCharacter[]> {
-  if (!isSupabaseConfigured || !supabase) return [];
+  const supabase = getSupabase();
+  if (!supabase) return [];
   let query = supabase.from("ai_characters").select("*").order("created_at", { ascending: false });
   if (wallet) query = query.eq("wallet", wallet);
 
@@ -157,7 +165,8 @@ export async function fetchAiCharacters(wallet?: string): Promise<AiCharacter[]>
 }
 
 export async function insertAiCharacter(character: AiCharacter): Promise<boolean> {
-  if (!isSupabaseConfigured || !supabase) return false;
+  const supabase = getSupabase();
+  if (!supabase) return false;
   const { error } = await supabase.from("ai_characters").insert({
     id: character.id,
     wallet: character.wallet,

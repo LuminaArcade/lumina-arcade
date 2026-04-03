@@ -1,12 +1,28 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+let _supabase: SupabaseClient | null = null;
+let _initialized = false;
 
-// Browser client — limited permissions
-export const supabase = supabaseUrl && supabaseAnon
-  ? createClient(supabaseUrl, supabaseAnon)
-  : null;
+function getSupabaseUrl() {
+  return process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+}
 
-// Check if Supabase is configured
-export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnon);
+function getSupabaseAnon() {
+  return process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+}
+
+export function isSupabaseConfigured(): boolean {
+  const url = getSupabaseUrl();
+  const anon = getSupabaseAnon();
+  return !!(url && anon && url.startsWith("http"));
+}
+
+export function getSupabase(): SupabaseClient | null {
+  if (_initialized) return _supabase;
+  _initialized = true;
+
+  if (!isSupabaseConfigured()) return null;
+
+  _supabase = createClient(getSupabaseUrl(), getSupabaseAnon());
+  return _supabase;
+}

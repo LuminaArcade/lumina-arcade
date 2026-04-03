@@ -152,7 +152,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Load data — try Supabase first, fall back to localStorage + seed
   useEffect(() => {
     async function init() {
-      if (isSupabaseConfigured) {
+      if (isSupabaseConfigured()) {
         const [pools, users, aiChars] = await Promise.all([
           fetchPools(),
           fetchUsers(),
