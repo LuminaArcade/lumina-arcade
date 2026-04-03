@@ -1,0 +1,88 @@
+"use client";
+
+import { useCallback } from "react";
+import { useAppContext } from "../context/AppContext";
+import { XP_REWARDS } from "../constants";
+import type { Pool } from "../types";
+
+export function usePools() {
+  const { state, dispatch, syncToDb } = useAppContext();
+
+  const createPool = useCallback(
+    (
+      pool: Pick<Pool, "name" | "ticker" | "description" | "creatorWallet" | "creatorName" | "targetSol" | "expiresAt">
+    ) => {
+      const newPool: Pool = {
+        ...pool,
+        id: crypto.randomUUID(),
+        raisedSol: 0,
+        participants: [],
+        pledges: [],
+        status: "active",
+        createdAt: Date.now(),
+      };
+      const addPoolAction = { type: "ADD_POOL" as const, pool: newPool };
+      dispatch(addPoolAction);
+      syncToDb(addPoolAction);
+
+      const xpAction = {
+        type: "ADD_XP" as const,
+        wallet: pool.creatorWallet,
+        amount: XP_REWARDS.CREATE_POOL,
+      };
+      dispatch(xpAction);
+      syncToDb(xpAction);
+
+      return newPool.id;
+    },
+    [dispatch, syncToDb]
+  );
+
+  const pledgeToPool = useCallback(
+    (poolId: string, wallet: string, amount: number) => {
+      const pledgeAction = { type: "PLEDGE_TO_POOL" as const, poolId, wallet, amount };
+      dispatch(pledgeAction);
+      syncToDb(pledgeAction);
+
+      const xp = XP_REWARDS.PLEDGE + Math.floor(amount * XP_REWARDS.PLEDGE_PER_SOL);
+      const xpAction = { type: "ADD_XP" as const, wallet, amount: xp };
+      dispatch(xpAction);
+      syncToDb(xpAction);
+
+      // Check if pool just launched — give creator bonus
+      const pool = state.pools.find((p) => p.id === poolId);
+      if (pool && pool.raisedSol + amount >= pool.targetSol) {
+        const bonusAction = {
+          type: "ADD_XP" as const,
+          wallet: pool.creatorWallet,
+          amount: XP_REWARDS.POOL_LAUNCHED,
+        };
+        dispatch(bonusAction);
+        syncToDb(bonusAction);
+      }
+    },
+    [dispatch, syncToDb, state.pools]
+  );
+
+  const getPool = useCallback(
+    (id: string) => state.pools.find((p) => p.id === id),
+    [state.pools]
+  );
+
+  const activePools = state.pools.filter((p) => p.status === "active");
+
+  const hotPools = [...state.pools]
+    .filter((p) => p.status === "active")
+    .sort((a, b) => b.raisedSol / b.targetSol - a.raisedSol / a.targetSol)
+    .slice(0, 6);
+
+  return {
+    pools: state.pools,
+    activePools,
+    hotPools,
+    createPool,
+    pledgeToPool,
+    getPool,
+    initialized: state.initialized,
+  };
+}
