@@ -4,16 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePools } from "@/lib/hooks/usePools";
 import CreatePoolModal from "@/app/components/CreatePoolModal";
-
-function formatTimeLeft(expiresAt: number): string {
-  const diff = expiresAt - Date.now();
-  if (diff <= 0) return "Expired";
-  const days = Math.floor(diff / 86_400_000);
-  const hours = Math.floor((diff % 86_400_000) / 3_600_000);
-  if (days > 0) return `${days}d ${hours}h`;
-  const mins = Math.floor((diff % 3_600_000) / 60_000);
-  return `${hours}h ${mins}m`;
-}
+import { formatTimeLeft } from "@/lib/utils";
 
 type Filter = "all" | "active" | "launched";
 

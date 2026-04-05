@@ -8,22 +8,22 @@ const platformLinks = [
 ];
 
 const resourceLinks = [
-  { label: "Documentation", href: "#" },
-  { label: "API", href: "#" },
-  { label: "Blog", href: "#" },
-  { label: "FAQ", href: "#" },
+  { label: "Documentation", href: "https://docs.luminaarcade.com", external: true },
+  { label: "GitHub", href: "https://github.com/LuminaArcade", external: true },
+  { label: "Blog", href: "https://twitter.com/LuminaArcade", external: true },
+  { label: "FAQ", href: "/pools" },
 ];
 
 const legalLinks = [
-  { label: "Terms of Service", href: "#" },
-  { label: "Privacy Policy", href: "#" },
-  { label: "Contact", href: "#" },
+  { label: "Terms of Service", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Contact", href: "https://twitter.com/LuminaArcade", external: true },
 ];
 
 const socials = [
-  { icon: DiscordIcon, href: "#", label: "Discord" },
-  { icon: TwitterIcon, href: "#", label: "Twitter" },
-  { icon: GitHubIcon, href: "#", label: "GitHub" },
+  { icon: DiscordIcon, href: "https://discord.gg/luminaarcade", label: "Discord" },
+  { icon: TwitterIcon, href: "https://twitter.com/LuminaArcade", label: "Twitter" },
+  { icon: GitHubIcon, href: "https://github.com/LuminaArcade", label: "GitHub" },
 ];
 
 export default function Footer() {
@@ -47,8 +47,10 @@ export default function Footer() {
               <a
                 key={label}
                 href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={label}
-                className="text-text-secondary transition-colors hover:text-neon-cyan"
+                className="text-text-secondary transition-colors hover:text-neon-cyan focus-visible:text-neon-cyan focus-visible:outline-none"
               >
                 <Icon className="h-5 w-5" />
               </a>
@@ -64,7 +66,7 @@ export default function Footer() {
             <Link
               key={link.label}
               href={link.href}
-              className="block py-1 text-sm text-text-secondary transition-colors hover:text-neon-cyan"
+              className="block py-1 text-sm text-text-secondary transition-colors hover:text-neon-cyan focus-visible:text-neon-cyan focus-visible:outline-none"
             >
               {link.label}
             </Link>
@@ -75,35 +77,62 @@ export default function Footer() {
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-white">
             Resources
           </h3>
-          {resourceLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="block py-1 text-sm text-text-secondary transition-colors hover:text-neon-cyan"
-            >
-              {link.label}
-            </a>
-          ))}
+          {resourceLinks.map((link) =>
+            link.external ? (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 py-1 text-sm text-text-secondary transition-colors hover:text-neon-cyan focus-visible:text-neon-cyan focus-visible:outline-none"
+              >
+                {link.label}
+                <svg className="h-3 w-3 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" />
+                </svg>
+              </a>
+            ) : (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="block py-1 text-sm text-text-secondary transition-colors hover:text-neon-cyan focus-visible:text-neon-cyan focus-visible:outline-none"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
         </div>
 
         <div>
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-white">
             Legal
           </h3>
-          {legalLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="block py-1 text-sm text-text-secondary transition-colors hover:text-neon-cyan"
-            >
-              {link.label}
-            </a>
-          ))}
+          {legalLinks.map((link) =>
+            link.external ? (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block py-1 text-sm text-text-secondary transition-colors hover:text-neon-cyan focus-visible:text-neon-cyan focus-visible:outline-none"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="block py-1 text-sm text-text-secondary transition-colors hover:text-neon-cyan focus-visible:text-neon-cyan focus-visible:outline-none"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
         </div>
       </div>
 
       <div className="mx-auto mt-12 flex max-w-6xl flex-col items-center justify-between border-t border-white/5 pt-8 text-xs text-text-dim md:flex-row">
-        <p>&copy; 2026 Lumina Arcade. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Lumina Arcade. All rights reserved.</p>
         <p className="mt-2 md:mt-0">Built on Bags.fm</p>
       </div>
     </footer>

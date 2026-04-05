@@ -5,11 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import WalletButton from "./WalletButton";
 
-const navLinks = [
+const navLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "Pools", href: "/pools" },
   { label: "Leaderboard", href: "/leaderboard" },
   { label: "Characters", href: "/characters" },
-  { label: "Docs", href: "#" },
+  { label: "Docs", href: "https://docs.luminaarcade.com", external: true },
 ];
 
 export default function Navbar() {
@@ -43,19 +43,31 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={`text-sm font-medium transition-colors ${
-                  pathname === link.href
-                    ? "text-neon-cyan"
-                    : "text-text-secondary hover:text-neon-cyan"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) =>
+              link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium text-text-secondary transition-colors hover:text-neon-cyan focus-visible:text-neon-cyan focus-visible:outline-none"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors focus-visible:text-neon-cyan focus-visible:outline-none ${
+                    pathname === link.href
+                      ? "text-neon-cyan"
+                      : "text-text-secondary hover:text-neon-cyan"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
             <WalletButton />
           </div>
 
