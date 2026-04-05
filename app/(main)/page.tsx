@@ -5,6 +5,7 @@ import CreatureShowcase from "@/app/components/CreatureShowcase";
 import HotPools from "@/app/components/HotPools";
 import LeaderboardPreview from "@/app/components/LeaderboardPreview";
 import CommunityEcosystem from "@/app/components/CommunityEcosystem";
+import BagsPowered from "@/app/components/BagsPowered";
 
 export default function Home() {
   return (
@@ -12,8 +13,9 @@ export default function Home() {
       <HeroSection />
       <StatsBar />
       <HowItWorks />
-      <CreatureShowcase />
       <HotPools />
+      <BagsPowered />
+      <CreatureShowcase />
       <LeaderboardPreview />
       <CommunityEcosystem />
     </>

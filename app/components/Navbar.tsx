@@ -3,13 +3,15 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import WalletButton from "./WalletButton";
+import UserProfileDropdown from "./UserProfileDropdown";
 
 const navLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "Pools", href: "/pools" },
+  { label: "Trade", href: "/trade" },
   { label: "Leaderboard", href: "/leaderboard" },
   { label: "Characters", href: "/characters" },
-  { label: "Docs", href: "https://docs.luminaarcade.com", external: true },
+  { label: "Fees", href: "/fees" },
+  { label: "Docs", href: "https://docs.bags.fm", external: true },
 ];
 
 export default function Navbar() {
@@ -68,7 +70,7 @@ export default function Navbar() {
                 </Link>
               )
             )}
-            <WalletButton />
+            <UserProfileDropdown />
           </div>
 
           <button
@@ -115,7 +117,7 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <WalletButton className="mt-3 w-full justify-center" />
+          <UserProfileDropdown className="mt-3 w-full justify-center" />
         </div>
       </div>
     </nav>

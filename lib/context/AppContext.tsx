@@ -31,7 +31,8 @@ export type Action =
   | { type: "PLEDGE_TO_POOL"; poolId: string; wallet: string; amount: number }
   | { type: "UPSERT_USER"; user: UserProfile }
   | { type: "ADD_XP"; wallet: string; amount: number }
-  | { type: "ADD_AI_CHARACTER"; character: AiCharacter };
+  | { type: "ADD_AI_CHARACTER"; character: AiCharacter }
+  | { type: "EXPIRE_POOL"; poolId: string };
 
 function recalcCreatures(xp: number): string[] {
   return CREATURES.filter((c) => xp >= c.xpThreshold).map((c) => c.id);
@@ -128,6 +129,17 @@ function appReducer(state: AppState, action: Action): AppState {
         ...state,
         aiCharacters: [action.character, ...state.aiCharacters],
       };
+
+    case "EXPIRE_POOL": {
+      return {
+        ...state,
+        pools: state.pools.map((p) =>
+          p.id === action.poolId && p.status === "active"
+            ? { ...p, status: "expired" as const }
+            : p
+        ),
+      };
+    }
 
     default:
       return state;

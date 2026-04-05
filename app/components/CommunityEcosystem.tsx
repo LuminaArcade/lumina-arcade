@@ -4,7 +4,7 @@ const links = [
   {
     title: "Discord",
     description: "Join the community",
-    href: "#",
+    href: "https://discord.gg/luminaarcade",
     Icon: DiscordIcon,
     accent: "group-hover:border-neon-purple/40 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]",
     iconColor: "text-neon-purple",
@@ -12,7 +12,7 @@ const links = [
   {
     title: "Twitter / X",
     description: "Follow for updates",
-    href: "#",
+    href: "https://twitter.com/LuminaArcade",
     Icon: TwitterIcon,
     accent: "group-hover:border-neon-cyan/40 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.15)]",
     iconColor: "text-neon-cyan",
@@ -20,7 +20,7 @@ const links = [
   {
     title: "GitHub",
     description: "View the source",
-    href: "#",
+    href: "https://github.com/LuminaArcade",
     Icon: GitHubIcon,
     accent: "group-hover:border-neon-green/40 group-hover:shadow-[0_0_20px_rgba(74,222,128,0.15)]",
     iconColor: "text-neon-green",
@@ -28,7 +28,7 @@ const links = [
   {
     title: "Docs",
     description: "Read the guides",
-    href: "#",
+    href: "https://docs.bags.fm",
     Icon: () => (
       <svg
         className="h-12 w-12 text-neon-pink"
@@ -67,6 +67,8 @@ export default function CommunityEcosystem() {
           <a
             key={title}
             href={href}
+            target="_blank"
+            rel="noopener noreferrer"
             className={`glass-card group p-6 text-center transition-all hover:scale-[1.02] ${accent}`}
           >
             <div

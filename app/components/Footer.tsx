@@ -3,12 +3,14 @@ import { DiscordIcon, TwitterIcon, GitHubIcon } from "./icons";
 
 const platformLinks = [
   { label: "Pools", href: "/pools" },
+  { label: "Trade", href: "/trade" },
   { label: "Leaderboard", href: "/leaderboard" },
   { label: "Characters", href: "/characters" },
+  { label: "Fees", href: "/fees" },
 ];
 
 const resourceLinks = [
-  { label: "Documentation", href: "https://docs.luminaarcade.com", external: true },
+  { label: "Documentation", href: "https://docs.bags.fm", external: true },
   { label: "GitHub", href: "https://github.com/LuminaArcade", external: true },
   { label: "Blog", href: "https://twitter.com/LuminaArcade", external: true },
   { label: "FAQ", href: "/pools" },

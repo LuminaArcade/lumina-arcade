@@ -22,6 +22,8 @@ export interface Pool {
   createdAt: number;
   expiresAt: number;
   launchedAt?: number;
+  tokenMint?: string;
+  bagsUrl?: string;
 }
 
 export interface UserProfile {

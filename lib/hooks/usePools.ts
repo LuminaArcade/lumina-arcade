@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useAppContext } from "../context/AppContext";
 import { XP_REWARDS } from "../constants";
 import type { Pool } from "../types";
@@ -75,6 +75,25 @@ export function usePools() {
     .filter((p) => p.status === "active")
     .sort((a, b) => b.raisedSol / b.targetSol - a.raisedSol / a.targetSol)
     .slice(0, 6);
+
+  // Check for expired pools
+  useEffect(() => {
+    if (!state.initialized) return;
+
+    const checkExpired = () => {
+      const now = Date.now();
+      state.pools.forEach((pool) => {
+        if (pool.status === "active" && pool.expiresAt <= now) {
+          // Mark as expired locally (fire and forget DB sync)
+          dispatch({ type: "EXPIRE_POOL" as any, poolId: pool.id });
+        }
+      });
+    };
+
+    checkExpired();
+    const interval = setInterval(checkExpired, 60000); // check every minute
+    return () => clearInterval(interval);
+  }, [state.initialized, state.pools, dispatch]);
 
   return {
     pools: state.pools,

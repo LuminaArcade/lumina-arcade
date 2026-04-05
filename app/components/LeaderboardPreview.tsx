@@ -6,8 +6,8 @@ import { ArrowRight } from "./icons";
 
 const rankColors: Record<number, string> = {
   1: "text-neon-gold",
-  2: "text-gray-400",
-  3: "text-amber-600",
+  2: "text-text-secondary",
+  3: "text-neon-pink",
 };
 
 const gradients = [

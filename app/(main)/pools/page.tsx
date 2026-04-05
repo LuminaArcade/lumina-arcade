@@ -6,7 +6,7 @@ import { usePools } from "@/lib/hooks/usePools";
 import CreatePoolModal from "@/app/components/CreatePoolModal";
 import { formatTimeLeft } from "@/lib/utils";
 
-type Filter = "all" | "active" | "launched";
+type Filter = "all" | "active" | "launched" | "expired";
 
 export default function PoolsPage() {
   const { pools, initialized } = usePools();
@@ -16,6 +16,7 @@ export default function PoolsPage() {
   const filtered = pools.filter((p) => {
     if (filter === "active") return p.status === "active";
     if (filter === "launched") return p.status === "launched";
+    if (filter === "expired") return p.status === "expired";
     return true;
   });
 
@@ -23,6 +24,7 @@ export default function PoolsPage() {
     { label: "All", value: "all" },
     { label: "Active", value: "active" },
     { label: "Launched", value: "launched" },
+    { label: "Expired", value: "expired" },
   ];
 
   return (
