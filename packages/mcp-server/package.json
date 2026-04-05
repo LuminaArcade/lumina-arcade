@@ -1,11 +1,11 @@
 {
-  "name": "@lumina-arcade/mcp-server",
+  "name": "lumina-arcade-mcp",
   "version": "1.0.0",
   "description": "MCP server for Lumina Arcade — interact with pools, leaderboards, and trading via AI agents",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "lumina-arcade-mcp": "./dist/index.js"
+    "lumina-arcade-mcp": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
