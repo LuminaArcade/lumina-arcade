@@ -1,4 +1,4 @@
-# lumina-arcade-mcp
+# luminaarcade-mcp
 
 MCP (Model Context Protocol) server for [Lumina Arcade](https://luminaarcade.com) -- the gamified SocialFi arcade on Solana, powered by Bags.fm.
 
@@ -15,7 +15,7 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
   "mcpServers": {
     "lumina-arcade": {
       "command": "npx",
-      "args": ["-y", "lumina-arcade-mcp"]
+      "args": ["-y", "luminaarcade-mcp"]
     }
   }
 }
@@ -24,14 +24,14 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 ### With Claude Code
 
 ```bash
-claude mcp add lumina-arcade -- npx -y lumina-arcade-mcp
+claude mcp add lumina-arcade -- npx -y luminaarcade-mcp
 ```
 
 ### Manual
 
 ```bash
-npm install -g lumina-arcade-mcp
-lumina-arcade-mcp
+npm install -g luminaarcade-mcp
+luminaarcade-mcp
 ```
 
 ## Available Tools
