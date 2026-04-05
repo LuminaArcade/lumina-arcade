@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePools } from "@/lib/hooks/usePools";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
+import { useReferral } from "@/lib/hooks/useReferral";
 import { useToast } from "./Toast";
 import { XP_REWARDS } from "@/lib/constants";
 
@@ -22,6 +23,7 @@ export default function CreatePoolModal({
 }) {
   const { createPool } = usePools();
   const { wallet, user, isConnected } = useCurrentUser();
+  const { awardReferralBonus } = useReferral();
   const { addToast } = useToast();
 
   const [name, setName] = useState("");
@@ -62,6 +64,7 @@ export default function CreatePoolModal({
         expiresAt: Date.now() + DURATIONS[durationIdx].ms,
       });
 
+      awardReferralBonus("create_pool");
       addToast(`Pool created! +${XP_REWARDS.CREATE_POOL} XP earned`, "success");
       setName("");
       setTicker("");

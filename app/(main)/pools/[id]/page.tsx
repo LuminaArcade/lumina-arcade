@@ -7,6 +7,7 @@ import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { useBags } from "@/lib/hooks/useBags";
 import { useToast } from "@/app/components/Toast";
 import PledgeModal from "@/app/components/PledgeModal";
+import ShareButton from "@/app/components/ShareButton";
 import { formatDate, formatTimeLeft } from "@/lib/utils";
 
 export default function PoolDetailPage({
@@ -76,6 +77,7 @@ export default function PoolDetailPage({
               <p className="mt-1 font-mono text-sm text-text-secondary">
                 ${pool.ticker} &middot; by {pool.creatorName}
               </p>
+              <ShareButton path={`/pools/${pool.id}`} poolName={pool.name} className="mt-2" />
             </div>
 
             {!isLaunched && (

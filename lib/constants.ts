@@ -62,6 +62,9 @@ export const XP_REWARDS = {
   PLEDGE: 50,
   PLEDGE_PER_SOL: 10,
   POOL_LAUNCHED: 500,
+  REFERRAL_SIGNUP: 100,      // referrer gets when referred user connects wallet
+  REFERRAL_PLEDGE: 25,       // both get on pledge via referral
+  REFERRAL_CREATE_POOL: 50,  // both get on pool creation via referral
 };
 
 export const STORAGE_KEYS = {

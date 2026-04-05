@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePools } from "@/lib/hooks/usePools";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
+import { useReferral } from "@/lib/hooks/useReferral";
 import { useToast } from "./Toast";
 import { XP_REWARDS } from "@/lib/constants";
 import type { Pool } from "@/lib/types";
@@ -18,6 +19,7 @@ export default function PledgeModal({
 }) {
   const { pledgeToPool } = usePools();
   const { wallet, isConnected } = useCurrentUser();
+  const { awardReferralBonus } = useReferral();
   const { addToast } = useToast();
   const [amount, setAmount] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -40,6 +42,7 @@ export default function PledgeModal({
     setSubmitting(true);
     try {
       pledgeToPool(pool.id, wallet, val);
+      awardReferralBonus("pledge");
       const xpEarned = XP_REWARDS.PLEDGE + Math.floor(val * XP_REWARDS.PLEDGE_PER_SOL);
       addToast(`Pledged ${val} SOL! +${xpEarned} XP earned`, "success");
 

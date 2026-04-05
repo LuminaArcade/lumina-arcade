@@ -217,6 +217,8 @@ function mapUserFromDb(row: any): UserProfile {
     poolsPledged: row.pools_pledged ?? [],
     creaturesUnlocked: row.creatures_unlocked ?? [],
     joinedAt: new Date(row.joined_at).getTime(),
+    referralCount: row.referral_count ?? 0,
+    referralXpEarned: row.referral_xp_earned ?? 0,
   };
 }
 

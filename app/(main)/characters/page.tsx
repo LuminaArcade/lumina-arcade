@@ -13,6 +13,7 @@ import {
   CreatureLegendary,
 } from "@/app/components/creatures";
 import type { ComponentType } from "react";
+import ReferralStats from "@/app/components/ReferralStats";
 import type { AiCharacter } from "@/lib/types";
 
 const componentMap: Record<string, ComponentType<{ className?: string }>> = {
@@ -250,6 +251,13 @@ export default function CharactersPage() {
                 </p>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Referral Program */}
+        {isConnected && (
+          <div className="mt-8">
+            <ReferralStats />
           </div>
         )}
 

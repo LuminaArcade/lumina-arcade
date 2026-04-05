@@ -19,6 +19,8 @@ export function useCurrentUser() {
         poolsPledged: [] as string[],
         creaturesUnlocked: ["blobby"],
         joinedAt: Date.now(),
+        referralCount: 0,
+        referralXpEarned: 0,
       };
       const action = { type: "UPSERT_USER" as const, user };
       dispatch(action);

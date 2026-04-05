@@ -12,6 +12,8 @@ const seedUsers: Record<string, UserProfile> = {
     poolsPledged: ["pool-2", "pool-3"],
     creaturesUnlocked: ["blobby", "sparky", "nebula", "frostbite", "voidwalker", "arcana"],
     joinedAt: now - 30 * DAY,
+    referralCount: 0,
+    referralXpEarned: 0,
   },
   "3mPQ...vT2e": {
     wallet: "3mPQ...vT2e",
@@ -21,6 +23,8 @@ const seedUsers: Record<string, UserProfile> = {
     poolsPledged: ["pool-1", "pool-3", "pool-5"],
     creaturesUnlocked: ["blobby", "sparky", "nebula", "frostbite", "voidwalker", "arcana"],
     joinedAt: now - 25 * DAY,
+    referralCount: 0,
+    referralXpEarned: 0,
   },
   "9aFb...kL4w": {
     wallet: "9aFb...kL4w",
@@ -30,6 +34,8 @@ const seedUsers: Record<string, UserProfile> = {
     poolsPledged: ["pool-1", "pool-2"],
     creaturesUnlocked: ["blobby", "sparky", "nebula", "frostbite", "voidwalker"],
     joinedAt: now - 20 * DAY,
+    referralCount: 0,
+    referralXpEarned: 0,
   },
   "5dRs...mN8x": {
     wallet: "5dRs...mN8x",
@@ -39,6 +45,8 @@ const seedUsers: Record<string, UserProfile> = {
     poolsPledged: ["pool-1", "pool-4"],
     creaturesUnlocked: ["blobby", "sparky", "nebula", "frostbite", "voidwalker"],
     joinedAt: now - 18 * DAY,
+    referralCount: 0,
+    referralXpEarned: 0,
   },
   "2wEp...jH6q": {
     wallet: "2wEp...jH6q",
@@ -48,6 +56,8 @@ const seedUsers: Record<string, UserProfile> = {
     poolsPledged: ["pool-1", "pool-2", "pool-3", "pool-4", "pool-5"],
     creaturesUnlocked: ["blobby", "sparky", "nebula", "frostbite", "voidwalker"],
     joinedAt: now - 15 * DAY,
+    referralCount: 0,
+    referralXpEarned: 0,
   },
   "8kVn...pW3y": {
     wallet: "8kVn...pW3y",
@@ -57,6 +67,8 @@ const seedUsers: Record<string, UserProfile> = {
     poolsPledged: ["pool-2", "pool-5"],
     creaturesUnlocked: ["blobby", "sparky", "nebula", "frostbite", "voidwalker"],
     joinedAt: now - 12 * DAY,
+    referralCount: 0,
+    referralXpEarned: 0,
   },
   "4tGh...rQ9z": {
     wallet: "4tGh...rQ9z",
@@ -66,6 +78,8 @@ const seedUsers: Record<string, UserProfile> = {
     poolsPledged: ["pool-1", "pool-3"],
     creaturesUnlocked: ["blobby", "sparky", "nebula", "frostbite", "voidwalker"],
     joinedAt: now - 10 * DAY,
+    referralCount: 0,
+    referralXpEarned: 0,
   },
   "6yBc...sX1a": {
     wallet: "6yBc...sX1a",
@@ -75,6 +89,8 @@ const seedUsers: Record<string, UserProfile> = {
     poolsPledged: ["pool-2", "pool-4", "pool-6"],
     creaturesUnlocked: ["blobby", "sparky", "nebula", "frostbite"],
     joinedAt: now - 7 * DAY,
+    referralCount: 0,
+    referralXpEarned: 0,
   },
 };
 

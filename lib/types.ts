@@ -34,6 +34,9 @@ export interface UserProfile {
   poolsPledged: string[];
   creaturesUnlocked: string[];
   joinedAt: number;
+  referredBy?: string;       // wallet that referred this user
+  referralCount: number;     // how many users this person referred
+  referralXpEarned: number;  // total XP earned from referrals
 }
 
 export interface Creature {
