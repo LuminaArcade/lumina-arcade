@@ -6,10 +6,11 @@ import Link from "next/link";
 
 interface ActivityItem {
   id: string;
-  type: "pledge" | "pool_created" | "pool_launched";
+  type: "pledge" | "pool_created" | "pool_launched" | "character_minted";
   message: string;
   poolId?: string;
   poolName?: string;
+  href: string;
   timestamp: number;
   icon: string;
   color: string;
@@ -17,6 +18,20 @@ interface ActivityItem {
 
 export default function ActivityFeed() {
   const { state } = useAppContext();
+
+  const rarityIcon: Record<string, string> = {
+    common: "🟢",
+    rare: "🔵",
+    epic: "🟣",
+    legendary: "🌟",
+  };
+
+  const rarityColor: Record<string, string> = {
+    common: "text-neon-green",
+    rare: "text-neon-cyan",
+    epic: "text-neon-purple",
+    legendary: "text-neon-gold",
+  };
 
   const activities = useMemo<ActivityItem[]>(() => {
     const items: ActivityItem[] = [];
@@ -30,6 +45,7 @@ export default function ActivityFeed() {
           message: `${pledge.wallet.slice(0, 4)}...${pledge.wallet.slice(-4)} pledged ${pledge.amount.toFixed(1)} SOL to ${pool.name}`,
           poolId: pool.id,
           poolName: pool.name,
+          href: `/pools/${pool.id}`,
           timestamp: pledge.timestamp,
           icon: "⚡",
           color: "text-neon-cyan",
@@ -43,6 +59,7 @@ export default function ActivityFeed() {
         message: `${pool.creatorName} created ${pool.name}`,
         poolId: pool.id,
         poolName: pool.name,
+        href: `/pools/${pool.id}`,
         timestamp: pool.createdAt,
         icon: "🎯",
         color: "text-neon-purple",
@@ -56,6 +73,7 @@ export default function ActivityFeed() {
           message: `${pool.name} launched! 🚀`,
           poolId: pool.id,
           poolName: pool.name,
+          href: `/pools/${pool.id}`,
           timestamp: pool.launchedAt,
           icon: "🚀",
           color: "text-neon-green",
@@ -63,9 +81,24 @@ export default function ActivityFeed() {
       }
     }
 
+    // AI character minted events
+    for (const char of state.aiCharacters) {
+      const wallet = char.wallet;
+      const short = `${wallet.slice(0, 4)}...${wallet.slice(-4)}`;
+      items.push({
+        id: `char-${char.id}`,
+        type: "character_minted",
+        message: `${short} minted a ${char.rarity.charAt(0).toUpperCase() + char.rarity.slice(1)} character: ${char.name}!`,
+        href: "/characters",
+        timestamp: char.createdAt,
+        icon: rarityIcon[char.rarity] ?? "✨",
+        color: rarityColor[char.rarity] ?? "text-neon-purple",
+      });
+    }
+
     // Sort by timestamp descending, take latest 50
     return items.sort((a, b) => b.timestamp - a.timestamp).slice(0, 50);
-  }, [state.pools]);
+  }, [state.pools, state.aiCharacters]);
 
   if (!state.initialized || activities.length === 0) return null;
 
@@ -102,7 +135,7 @@ export default function ActivityFeed() {
             {[...tickerItems, ...tickerItems].map((item, i) => (
               <Link
                 key={`${item.id}-${i}`}
-                href={item.poolId ? `/pools/${item.poolId}` : "/pools"}
+                href={item.href}
                 className="inline-flex items-center gap-2 px-4 text-sm transition-colors hover:text-white"
               >
                 <span>{item.icon}</span>
