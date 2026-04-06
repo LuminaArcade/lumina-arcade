@@ -76,6 +76,22 @@ export function usePools() {
     .sort((a, b) => b.raisedSol / b.targetSol - a.raisedSol / a.targetSol)
     .slice(0, 6);
 
+  // Trending pools: ranked by recent pledge momentum (last 24h activity)
+  const trendingPools = [...state.pools]
+    .filter((p) => p.status === "active")
+    .map((pool) => {
+      const oneDayAgo = Date.now() - 86_400_000;
+      const recentPledges = pool.pledges.filter((p) => p.timestamp > oneDayAgo);
+      const recentVolume = recentPledges.reduce((sum, p) => sum + p.amount, 0);
+      const recentCount = recentPledges.length;
+      // Momentum score: weighted combination of recent volume + pledge count + recency
+      const momentum = recentVolume * 2 + recentCount * 5;
+      return { pool, momentum, recentVolume, recentCount };
+    })
+    .filter((t) => t.momentum > 0)
+    .sort((a, b) => b.momentum - a.momentum)
+    .slice(0, 6);
+
   // Check for expired pools
   useEffect(() => {
     if (!state.initialized) return;
@@ -99,6 +115,7 @@ export function usePools() {
     pools: state.pools,
     activePools,
     hotPools,
+    trendingPools,
     createPool,
     pledgeToPool,
     getPool,

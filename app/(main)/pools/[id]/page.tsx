@@ -9,7 +9,8 @@ import { useToast } from "@/app/components/Toast";
 import PledgeModal from "@/app/components/PledgeModal";
 import ShareButton from "@/app/components/ShareButton";
 import EarningsProjection from "@/app/components/EarningsProjection";
-import { formatDate, formatTimeLeft } from "@/lib/utils";
+import PoolCountdown, { EndingSoonBadge } from "@/app/components/PoolCountdown";
+import { formatDate } from "@/lib/utils";
 
 export default function PoolDetailPage({
   params,
@@ -65,15 +66,18 @@ export default function PoolDetailPage({
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-3xl font-bold text-white">{pool.name}</h1>
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                    isLaunched
-                      ? "bg-neon-green/20 text-neon-green"
-                      : "bg-neon-cyan/20 text-neon-cyan"
-                  }`}
-                >
-                  {isLaunched ? "Launched" : "Active"}
-                </span>
+                <div className="flex items-center gap-2">
+                  {!isLaunched && <EndingSoonBadge expiresAt={pool.expiresAt} />}
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                      isLaunched
+                        ? "bg-neon-green/20 text-neon-green"
+                        : "bg-neon-cyan/20 text-neon-cyan"
+                    }`}
+                  >
+                    {isLaunched ? "Launched" : "Active"}
+                  </span>
+                </div>
               </div>
               <p className="mt-1 font-mono text-sm text-text-secondary">
                 ${pool.ticker} &middot; by {pool.creatorName}
@@ -156,12 +160,19 @@ export default function PoolDetailPage({
               <p className="text-xs text-text-secondary">Pledges</p>
             </div>
             <div className="text-center">
-              <p className="font-mono text-xl font-bold text-white">
-                {isLaunched ? "Launched" : formatTimeLeft(pool.expiresAt)}
-              </p>
-              <p className="text-xs text-text-secondary">
-                {isLaunched ? "Status" : "Time Left"}
-              </p>
+              {isLaunched ? (
+                <>
+                  <p className="font-mono text-xl font-bold text-neon-green">Launched</p>
+                  <p className="text-xs text-text-secondary">Status</p>
+                </>
+              ) : (
+                <>
+                  <div className="flex justify-center">
+                    <PoolCountdown expiresAt={pool.expiresAt} />
+                  </div>
+                  <p className="text-xs text-text-secondary mt-1">Time Left</p>
+                </>
+              )}
             </div>
           </div>
         </div>

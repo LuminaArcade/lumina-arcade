@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePools } from "@/lib/hooks/usePools";
 import CreatePoolModal from "@/app/components/CreatePoolModal";
-import { formatTimeLeft } from "@/lib/utils";
+import PoolCountdown, { EndingSoonBadge } from "@/app/components/PoolCountdown";
 
 type Filter = "all" | "active" | "launched" | "expired";
 
@@ -96,15 +96,18 @@ export default function PoolsPage() {
                         by {pool.creatorName}
                       </p>
                     </div>
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                        isLaunched
-                          ? "bg-neon-green/20 text-neon-green"
-                          : "bg-neon-cyan/20 text-neon-cyan"
-                      }`}
-                    >
-                      {isLaunched ? "Launched" : "Active"}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <EndingSoonBadge expiresAt={pool.expiresAt} />
+                      <span
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                          isLaunched
+                            ? "bg-neon-green/20 text-neon-green"
+                            : "bg-neon-cyan/20 text-neon-cyan"
+                        }`}
+                      >
+                        {isLaunched ? "Launched" : "Active"}
+                      </span>
+                    </div>
                   </div>
 
                   <p className="mt-2 text-sm text-text-secondary line-clamp-2">
@@ -127,9 +130,11 @@ export default function PoolsPage() {
 
                   <div className="mt-3 flex items-center justify-between text-xs text-text-secondary">
                     <span>{pool.participants.length} players</span>
-                    <span>
-                      {isLaunched ? "Launched" : formatTimeLeft(pool.expiresAt)}
-                    </span>
+                    {isLaunched ? (
+                      <span>Launched</span>
+                    ) : (
+                      <PoolCountdown expiresAt={pool.expiresAt} compact />
+                    )}
                   </div>
                 </Link>
               );
