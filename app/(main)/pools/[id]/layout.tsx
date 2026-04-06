@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { isSupabaseConfigured } from "@/lib/supabase";
+import { fetchPools } from "@/lib/supabase-data";
 import { generateSeedData } from "@/lib/seed";
 
 const SITE_URL = "https://luminaarcade.com";
@@ -9,7 +11,13 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const { pools } = generateSeedData();
+
+  let pools;
+  if (isSupabaseConfigured()) {
+    pools = await fetchPools() ?? [];
+  } else {
+    pools = generateSeedData().pools;
+  }
   const pool = pools.find((p) => p.id === id);
 
   if (!pool) {

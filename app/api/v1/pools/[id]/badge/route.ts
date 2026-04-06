@@ -1,4 +1,6 @@
 import { NextRequest } from "next/server";
+import { isSupabaseConfigured } from "@/lib/supabase";
+import { fetchPools } from "@/lib/supabase-data";
 import { generateSeedData } from "@/lib/seed";
 
 const CORS_HEADERS = {
@@ -183,7 +185,13 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const { pools } = generateSeedData();
+
+  let pools;
+  if (isSupabaseConfigured()) {
+    pools = await fetchPools() ?? [];
+  } else {
+    pools = generateSeedData().pools;
+  }
   const pool = pools.find((p) => p.id === id);
 
   if (!pool) {
