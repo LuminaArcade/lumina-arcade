@@ -9,6 +9,7 @@ import { useToast } from "@/app/components/Toast";
 import PledgeModal from "@/app/components/PledgeModal";
 import ShareButton from "@/app/components/ShareButton";
 import EarningsProjection from "@/app/components/EarningsProjection";
+import FeeTracker from "@/app/components/FeeTracker";
 import PoolCountdown, { EndingSoonBadge } from "@/app/components/PoolCountdown";
 import { formatDate } from "@/lib/utils";
 
@@ -262,6 +263,15 @@ export default function PoolDetailPage({
         {/* Creator Earnings Projection */}
         <div className="mt-8">
           <EarningsProjection targetSol={pool.targetSol} />
+        </div>
+
+        {/* Lifetime Fee Tracker */}
+        <div className="mt-8">
+          <FeeTracker
+            tokenMint={pool.tokenMint}
+            poolName={pool.name}
+            isLaunched={isLaunched}
+          />
         </div>
 
         {/* Trade & Bags links for launched pools */}
