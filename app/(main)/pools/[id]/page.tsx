@@ -8,6 +8,7 @@ import { useBags } from "@/lib/hooks/useBags";
 import { useToast } from "@/app/components/Toast";
 import PledgeModal from "@/app/components/PledgeModal";
 import ShareButton from "@/app/components/ShareButton";
+import EarningsProjection from "@/app/components/EarningsProjection";
 import { formatDate, formatTimeLeft } from "@/lib/utils";
 
 export default function PoolDetailPage({
@@ -245,6 +246,11 @@ export default function PoolDetailPage({
               </dd>
             </div>
           </dl>
+        </div>
+
+        {/* Creator Earnings Projection */}
+        <div className="mt-8">
+          <EarningsProjection targetSol={pool.targetSol} />
         </div>
 
         {/* Trade & Bags links for launched pools */}

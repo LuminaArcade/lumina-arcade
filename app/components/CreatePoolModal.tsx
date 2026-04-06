@@ -5,6 +5,7 @@ import { usePools } from "@/lib/hooks/usePools";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
 import { useReferral } from "@/lib/hooks/useReferral";
 import { useToast } from "./Toast";
+import EarningsProjection from "./EarningsProjection";
 import { XP_REWARDS } from "@/lib/constants";
 
 const DURATIONS = [
@@ -199,6 +200,11 @@ export default function CreatePoolModal({
                 ))}
               </div>
             </div>
+
+            {/* Earnings projection teaser */}
+            {parseFloat(targetSol) > 0 && (
+              <EarningsProjection targetSol={parseFloat(targetSol)} compact />
+            )}
 
             <button
               type="submit"
