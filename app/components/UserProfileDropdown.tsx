@@ -4,13 +4,25 @@ import { useState, useRef, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useCurrentUser } from "@/lib/hooks/useCurrentUser";
+import { useTokenGate } from "@/lib/hooks/useTokenGate";
+import { useAppContext } from "@/lib/context/AppContext";
+import { calculateReputationScore, getReputationTier } from "./WalletReputation";
+import PremiumBadge from "./PremiumBadge";
 import { WalletIcon } from "./icons";
 import Link from "next/link";
 
 export default function UserProfileDropdown({ className = "" }: { className?: string }) {
   const { publicKey, disconnect, connecting } = useWallet();
   const { setVisible } = useWalletModal();
-  const { user } = useCurrentUser();
+  const { user, wallet } = useCurrentUser();
+  const { isPremium } = useTokenGate();
+  const { state } = useAppContext();
+
+  const reputationTier = (() => {
+    if (!user || !wallet) return null;
+    const score = calculateReputationScore(user, state.pools, user.creaturesUnlocked.length);
+    return getReputationTier(score);
+  })();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -54,10 +66,16 @@ export default function UserProfileDropdown({ className = "" }: { className?: st
             {short.slice(0, 2)}
           </div>
           <span className="font-mono text-xs text-text-secondary">{short}</span>
+          {isPremium && <PremiumBadge />}
           {/* XP Badge */}
           <span className="rounded-full bg-neon-purple/20 px-2 py-0.5 font-mono text-[10px] font-bold text-neon-purple">
             {user.xp.toLocaleString("en-US")} XP
           </span>
+          {reputationTier && (
+            <span className={`rounded-full bg-white/5 px-2 py-0.5 text-[10px] font-bold ${reputationTier.color}`}>
+              {reputationTier.name}
+            </span>
+          )}
           {/* Chevron */}
           <svg
             className={`h-3.5 w-3.5 text-text-dim transition-transform ${open ? "rotate-180" : ""}`}
@@ -79,14 +97,17 @@ export default function UserProfileDropdown({ className = "" }: { className?: st
                   {short.slice(0, 2)}
                 </div>
                 <div>
-                  <p className="font-semibold text-white text-sm">{user.displayName}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="font-semibold text-white text-sm">{user.displayName}</p>
+                    {isPremium && <PremiumBadge />}
+                  </div>
                   <p className="font-mono text-xs text-text-dim">{short}</p>
                 </div>
               </div>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-1 border-b border-white/5 px-4 py-3">
+            <div className={`grid ${isPremium ? "grid-cols-4" : "grid-cols-3"} gap-1 border-b border-white/5 px-4 py-3`}>
               <div className="text-center">
                 <p className="font-mono text-sm font-bold text-neon-purple">{user.xp.toLocaleString("en-US")}</p>
                 <p className="text-[10px] text-text-dim">XP</p>
@@ -99,6 +120,12 @@ export default function UserProfileDropdown({ className = "" }: { className?: st
                 <p className="font-mono text-sm font-bold text-neon-green">{user.poolsPledged.length}</p>
                 <p className="text-[10px] text-text-dim">Pledges</p>
               </div>
+              {isPremium && (
+                <div className="text-center">
+                  <p className="font-mono text-sm font-bold text-amber-400">PRO</p>
+                  <p className="text-[10px] text-text-dim">Status</p>
+                </div>
+              )}
             </div>
 
             {/* Links */}

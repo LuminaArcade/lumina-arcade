@@ -7,6 +7,7 @@ const platformLinks = [
   { label: "Leaderboard", href: "/leaderboard" },
   { label: "Characters", href: "/characters" },
   { label: "Fees", href: "/fees" },
+  { label: "Analytics", href: "/analytics" },
 ];
 
 const resourceLinks = [

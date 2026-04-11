@@ -11,6 +11,7 @@ const navLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "Leaderboard", href: "/leaderboard" },
   { label: "Characters", href: "/characters" },
   { label: "Fees", href: "/fees" },
+  { label: "Analytics", href: "/analytics" },
   { label: "Docs", href: "https://docs.bags.fm", external: true },
 ];
 

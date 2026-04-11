@@ -11,6 +11,9 @@ import ShareButton from "@/app/components/ShareButton";
 import EarningsProjection from "@/app/components/EarningsProjection";
 import FeeTracker from "@/app/components/FeeTracker";
 import PoolCountdown, { EndingSoonBadge } from "@/app/components/PoolCountdown";
+import LaunchReadyBanner from "@/app/components/LaunchReadyBanner";
+import TokenPrice from "@/app/components/TokenPrice";
+import TokenPriceCard from "@/app/components/TokenPriceCard";
 import { formatDate } from "@/lib/utils";
 
 export default function PoolDetailPage({
@@ -46,6 +49,18 @@ export default function PoolDetailPage({
     Math.round((pool.raisedSol / pool.targetSol) * 100)
   );
   const isLaunched = pool.status === "launched";
+  const isCreator = isConnected && wallet === pool.creatorWallet;
+
+  const handleLaunch = async () => {
+    const result = await launchToken({
+      name: pool.name,
+      symbol: pool.ticker,
+      description: pool.description,
+    });
+    if (result) {
+      addToast(`Token ${pool.ticker} launched on Bags.fm!`, "success");
+    }
+  };
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-4">
@@ -83,6 +98,11 @@ export default function PoolDetailPage({
               <p className="mt-1 font-mono text-sm text-text-secondary">
                 ${pool.ticker} &middot; by {pool.creatorName}
               </p>
+              {isLaunched && pool.tokenMint && (
+                <div className="mt-1.5">
+                  <TokenPrice tokenMint={pool.tokenMint} ticker={pool.ticker} />
+                </div>
+              )}
               <ShareButton path={`/pools/${pool.id}`} poolName={pool.name} className="mt-2" />
             </div>
 
@@ -100,18 +120,9 @@ export default function PoolDetailPage({
                   {isConnected ? "Pledge SOL" : "Connect Wallet to Pledge"}
                 </button>
                 {/* Show launch button when pool target is reached */}
-                {percentage >= 100 && isConnected && wallet === pool.creatorWallet && (
+                {percentage >= 100 && isCreator && (
                   <button
-                    onClick={async () => {
-                      const result = await launchToken({
-                        name: pool.name,
-                        symbol: pool.ticker,
-                        description: pool.description,
-                      });
-                      if (result) {
-                        addToast(`Token ${pool.ticker} launched on Bags.fm!`, "success");
-                      }
-                    }}
+                    onClick={handleLaunch}
                     disabled={launching}
                     className={`rounded-lg px-6 py-3 text-sm font-semibold transition-all ${
                       launching
@@ -127,6 +138,18 @@ export default function PoolDetailPage({
           </div>
 
           <p className="mt-4 text-text-secondary">{pool.description}</p>
+
+          {/* Launch Ready Banner */}
+          {percentage >= 100 && pool.status === "active" && (
+            <div className="mt-6">
+              <LaunchReadyBanner
+                pool={pool}
+                isCreator={!!isCreator}
+                onLaunch={handleLaunch}
+                launching={launching}
+              />
+            </div>
+          )}
 
           {/* Progress */}
           <div className="mt-6">
@@ -177,6 +200,13 @@ export default function PoolDetailPage({
             </div>
           </div>
         </div>
+
+        {/* Token Price Card for launched pools */}
+        {isLaunched && pool.tokenMint && (
+          <div className="mt-8">
+            <TokenPriceCard tokenMint={pool.tokenMint} ticker={pool.ticker} />
+          </div>
+        )}
 
         {/* Recent Pledges */}
         <div className="mt-8">
