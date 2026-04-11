@@ -43,7 +43,7 @@ export default function TokenGateBanner() {
 
         <div className="flex items-center gap-2">
           <a
-            href="https://bags.fm"
+            href="https://bags.fm/token/7jC3iMX9RzgnkND9TriAmQcdJpz7SxNGyJiPpo3EBAGS"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg bg-amber-500 px-4 py-2 text-xs font-semibold text-black transition-all hover:bg-amber-400 hover:shadow-[0_0_15px_rgba(251,191,36,0.3)]"
